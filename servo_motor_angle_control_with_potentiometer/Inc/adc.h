@@ -1,8 +1,8 @@
 /*
  * adc.h
  *
- *  Created on: 11 Şub 2023
- *      Author: metab
+ *
+ *      Author: Baris Cakir
  */
 
 #ifndef ADC_H_

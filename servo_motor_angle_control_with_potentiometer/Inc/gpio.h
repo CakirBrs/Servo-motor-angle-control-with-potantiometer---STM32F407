@@ -1,8 +1,8 @@
 /*
  * gpio.h
  *
- *  Created on: 2 Ara 2022
- *      Author: metab
+ *
+ *      Author: Baris Cakir
  */
 
 #ifndef GPIO_H_
@@ -29,7 +29,7 @@ typedef struct{
 typedef struct{
 	GPIO_RegDef_t * pGpioX;
 	GPIO_PinConfig_t gPIO_pinConfig;
-}GPIO_Handle_t; //bu bir portu ifade ediyor
+}GPIO_Handle_t;
 
 
 //GPİO MODES
@@ -141,7 +141,6 @@ uint32_t gpio_read_input_pin(GPIO_RegDef_t *pGpiox, uint32_t pin_no);
 
 void clear_pending_reg(uint8_t pin_no);
 
-//void EXTI0_IRQHandler(void);
 
 void toggle_board_random_leds();
 #endif /* GPIO_H_ */

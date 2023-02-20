@@ -22,52 +22,33 @@
 #include "adc.h"
 #include "timer.h"
 
-void GPIO_Init(void);
-void TIM2_Init(void);
-void TIM4_ms_Delay(uint32_t delay);
+/*
+ *
+ * SERVO MOTOR DATA PIN : PA5
+ * POTANTIOMETER PIN : PA0
+ *
+ * */
 
-void GPIO_Init(){
-	RCC->AHB1ENR |= 1; //Enable GPIOA clock
-	GPIOA->AFR[0] |= 0x00100000; // Select the PA5 pin in alternate function mode
-	GPIOA->MODER |= 0x00000800; //Set the PA5 pin alternate function
-}
-
-void TIM2_Init(){
-	RCC->APB1ENR |=1;
-	TIMER2->PSC = 16-1; //Setting the clock frequency to 1MHz.
-	TIMER2->ARR = 20000-1; // Total period of the timer
-	TIMER2->CNT = 0;
-	TIMER2->CCMR1 = 0x0060; //PWM mode for the timer
-	TIMER2->CCER |= 1; //Enable channel 1 as output
-	TIMER2->CCR1 = 500; // Pulse width for PWM
-}
-
-void TIM4_ms_Delay(uint32_t delay){
-	RCC->APB1ENR |= 1<<2; //Start the clock for the timer peripheral
-	TIMER4->PSC = 16000-1; //Setting the clock frequency to 1kHz.
-	TIMER4->ARR = (delay); // Total period of the timer
-	TIMER4->CNT = 0;
-	TIMER4->CR1 |= 1; //Start the Timer
-	while(!(TIMER4->SR & (0x1UL << (0U)))){} //Polling the update interrupt flag
-	TIMER4->SR &= ~(0x0001); //Reset the update interrupt flag
-}
 
 int main(){
 
+
 	RCC->CFGR |= 0<<10; // set APB1 = 16 MHz
-	GPIO_Init();
-	TIM2_Init();
-	TIMER2->CR1 |= 1;
+	
+	GPIO_Handle_t PA5 ={GPIOA,{GPIO_PIN_NO_5,GPIO_MODE_ALTERNATE,0,0,0,GPIO_AF1}};
+	gpio_init(&PA5);
+
+	pwm_init(TIMER_2, 16, 20000, 500);
 
 	adc_init();
-	uint32_t a;
+	uint32_t adc_data;
 
 	while(1){
+
 		start_conversation();
-		a = adc_read();
-		TIMER2->CCR1 = a*1.8+500;//*1.9+556;
-
-
+		adc_data = adc_read();
+		TIMER2->CCR1 = adc_data*1.9+556;
+	
 
 	}
 }

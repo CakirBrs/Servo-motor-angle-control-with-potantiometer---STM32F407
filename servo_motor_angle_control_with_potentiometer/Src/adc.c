@@ -1,8 +1,7 @@
 /*
  * adc.c
  *
- *  Created on: 11 Şub 2023
- *      Author: metab
+ *      Author: Baris Cakir
  */
 
 #include "adc.h"
